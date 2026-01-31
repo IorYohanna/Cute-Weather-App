@@ -4,9 +4,9 @@ let mainWindow;
 
 function createWindow() {
   mainWindow = new BrowserWindow({
-    title: "Pomodoro",
-    width: 600,
-    height: 800,
+    title: "Weather-App",
+    width: 800,
+    height: 900,
     frame: false,
     titleBarStyle: "hidden",
     resizable: false,      

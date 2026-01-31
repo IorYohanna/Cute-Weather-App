@@ -1,7 +1,7 @@
 import { Icon } from '@iconify/react';
 
 export const WeatherHero = () => (
-  <div className="relative w-64 h-64 mb-6 animate-float cursor-default group">
+  <div className="relative w-64 h-64 animate-float cursor-default group">
     <div className="absolute inset-0 m-auto w-40 h-40 bg-linear-to-tr from-amber-200 to-orange-100 rounded-full shadow-[0_0_60px_-10px_rgba(251,191,36,0.3)] flex flex-col items-center justify-center border border-orange-100/50">
       <div className="relative mt-2 flex gap-4">
         <div className="w-3 h-3 bg-stone-700 rounded-full animate-blink"></div>
