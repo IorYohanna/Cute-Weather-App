@@ -1,3 +1,12 @@
+export interface ForecastItem {
+  day: string;
+  temp: number;
+  icon: string;
+  colorClass: string;
+  bgClass: string;
+  condition: string;
+}
+
 export interface WeatherStat {
   label: string;
   value: string;
@@ -6,10 +15,12 @@ export interface WeatherStat {
   bgClass: string;
 }
 
-export interface ForecastItem {
-  day: string;
+export interface WeatherData {
+  city: string;
   temp: number;
-  icon: string;
-  colorClass: string;
-  bgClass: string;
+  description: string;
+  humidity: number;
+  windSpeed: number;
+  condition: string;
+  forecast: ForecastItem[];
 }

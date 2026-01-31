@@ -1,7 +1,6 @@
 @import "tailwindcss";
 
 @theme {
-  /* On définit les animations pour qu'elles soient utilisables via animate-float, etc. */
   --animate-float: float 6s ease-in-out infinite;
   --animate-drift: drift 8s ease-in-out infinite;
   --animate-blink: blink 4s infinite;
@@ -26,14 +25,12 @@
   }
 }
 
-/* On garde les classes utilitaires spécifiques ou complexes dans @layer components */
 @layer components {
   .noise-bg {
     @apply absolute inset-0 pointer-events-none z-50 opacity-[0.06] mix-blend-multiply;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='1'/%3E%3C/svg%3E");
   }
 
-  /* Pour gérer le délai spécifique de steam-2 directement en CSS si besoin */
   .steam-delay {
     animation-delay: 1.5s;
   }
