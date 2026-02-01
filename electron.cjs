@@ -5,7 +5,7 @@ let mainWindow;
 function createWindow() {
   mainWindow = new BrowserWindow({
     title: "Weather-App",
-    width: 800,
+    width: 600,
     height: 900,
     frame: false,
     titleBarStyle: "hidden",

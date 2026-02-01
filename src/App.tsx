@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
-import { WeatherHero } from "./components/WeatherHero";
+import { WeatherIllustration } from "./components/weatherIllustration";
 import { StatCard } from "./components/StatCard";
 import { fetchWeatherByCity } from "./api/weatherService";
 import type { WeatherData } from "./types/types";
@@ -9,7 +9,8 @@ const WeatherApp: React.FC = () => {
   const [weather, setWeather] = useState<WeatherData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const [search, setSearch] = useState("Kyoto");
+  const [search, setSearch] = useState("");
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   const handleFetch = async (city: string) => {
     setLoading(true);
@@ -19,14 +20,14 @@ const WeatherApp: React.FC = () => {
       setWeather(data);
     } catch (err) {
       setError(true);
-      console.log(err);
+      console.error(err);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    handleFetch("Kyoto");
+    handleFetch("Antananarivo");
   }, []);
 
   const onSearchSubmit = (e: React.FormEvent) => {
@@ -35,136 +36,161 @@ const WeatherApp: React.FC = () => {
   };
 
   return (
-    <div className="w-200 h-225 bg-[#FFFBF7] shadow-2xl overflow-hidden flex flex-col justify-between font-['Quicksand'] selection:bg-rose-200 relative">
-      <div className="noise-bg absolute inset-0 pointer-events-none" />
+    <div
+      className={`w-150 h-225 shadow-2xl overflow-hidden flex flex-col justify-between font-serif relative transition-colors duration-700 
+      ${isDarkMode ? "bg-[#1A1C1E] text-white" : "bg-[#FDF8F3] text-[#333]"}`}
+    >
+      <div className="absolute top-0 w-full h-12 flex justify-end items-center px-6 gap-4 z-50">
+        <button
+          onClick={() => window.electronAPI?.minimizeApp()}
+          className="hover:opacity-50 transition-opacity"
+        >
+          <Icon icon="solar:minimize-square-linear" width="18" />
+        </button>
+        <button
+           onClick={() => window.electronAPI?.closeApp()}
+          className="hover:text-rose-400 transition-colors"
+        >
+          <Icon icon="solar:close-circle-linear" width="18" />
+        </button>
+      </div>
 
-      <div className="absolute top-[-10%] left-[-10%] w-2/3 h-1/2 bg-blue-100/40 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-2/3 h-1/2 bg-orange-100/40 rounded-full blur-3xl pointer-events-none" />
+      <header className="relative z-20 px-10 pt-16 flex justify-between items-start">
+        <div className="flex items-start">
+          <span className="text-8xl font-light tracking-tighter italic">
+            {weather?.temp || "0"}
+          </span>
+          <span className="text-4xl mt-4">°</span>
+        </div>
 
-      <header className="relative z-10 px-10 pt-10 flex justify-between items-center">
-        <div>
-          <h2 className="text-3xl font-bold text-stone-700">
-            {weather?.city || "---"}
-          </h2>
-          <span className="text-sm font-medium text-stone-400">
-            {new Date().toLocaleDateString("en-GB", {
-              weekday: "long",
-              day: "numeric",
-              month: "long",
-            })}
+        <div className="flex flex-col items-end gap-6 mt-4">
+          <button
+            onClick={() => setIsDarkMode(!isDarkMode)}
+            className={`w-12 h-6 rounded-full p-1 flex items-center transition-all duration-500 border
+              ${isDarkMode ? "bg-slate-700 border-slate-600 justify-end" : "bg-orange-100 border-orange-200 justify-start"}`}
+          >
+            <div
+              className={`w-4 h-4 rounded-full shadow-sm flex items-center justify-center transition-transform
+              ${isDarkMode ? "bg-blue-400" : "bg-orange-400"}`}
+            >
+              <Icon
+                icon={isDarkMode ? "solar:moon-bold" : "solar:sun-bold"}
+                className="text-white"
+                width="10"
+              />
+            </div>
+          </button>
+
+          <form onSubmit={onSearchSubmit} className="relative group">
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search city..."
+              className={`w-24 bg-transparent border-b text-xs py-1 outline-none text-right focus:w-36 transition-all italic placeholder:opacity-30
+                ${isDarkMode ? "border-white/10" : "border-black/10"}`}
+            />
+            <button
+              type="submit"
+              className="absolute -left-4 top-1.5 opacity-0 group-focus-within:opacity-40 transition-opacity"
+            >
+              <Icon icon="solar:magnifer-linear" width="12" />
+            </button>
+          </form>
+        </div>
+      </header>
+
+      <main className="relative flex-1 flex flex-col items-center justify-center">
+        <div className="absolute right-8 top-1/4 h-40 flex items-center pointer-events-none">
+          <span
+            className={`rotate-90 text-[10px] tracking-[0.6em] uppercase opacity-40 font-sans origin-center whitespace-nowrap
+              ${isDarkMode ? "text-white" : "text-black"}`}
+          >
+            {weather?.description || "Loading"}
           </span>
         </div>
 
-        <form onSubmit={onSearchSubmit} className="relative">
+        {loading ? (
           <Icon
-            icon="solar:magnifer-linear"
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400"
-            width={20}
+            icon="solar:refresh-linear"
+            className="animate-spin opacity-20"
+            width="48"
           />
-          <input
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search city..."
-            className="pl-10 pr-4 py-3 bg-white/50 border border-stone-200 rounded-2xl text-sm w-64 focus:bg-white transition-all outline-none"
-          />
-        </form>
-      </header>
-
-      <main className="relative z-10 flex-1 flex flex-col justify-center items-center py-6 overflow-hidden">
-        <div className="h-full flex flex-col justify-center items-center">
-          {loading ? (
-            <Icon
-              icon="solar:refresh-linear"
-              className="animate-spin text-stone-200"
-              width={64}
+        ) : error ? (
+          <div className="text-center italic opacity-40">City not found</div>
+        ) : (
+          <>
+            <WeatherIllustration
+              condition={weather?.description || "Clear"}
+              isDarkMode={isDarkMode}
             />
-          ) : error ? (
-            <div className="text-center">
-              <Icon
-                icon="solar:sad-square-linear"
-                className="text-rose-200 mx-auto"
-                width={64}
-              />
-              <p className="mt-4 font-bold text-stone-400 uppercase tracking-widest text-xs">
-                City not found
+            <div className="text-center mt-8 z-10">
+              <h2 className="text-4xl tracking-[0.2em] uppercase font-medium">
+                {weather?.city || "---"}
+              </h2>
+              <p className="text-xs opacity-40 mt-2 font-sans uppercase tracking-widest">
+                {new Date().toLocaleDateString("en-GB", {
+                  weekday: "long",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
               </p>
             </div>
-          ) : (
-            <div className="flex flex-col items-center">
-              <WeatherHero />
-
-              <div className="text-center flex flex-col items-center">
-                <div className="flex items-start">
-                  <span className="text-9xl font-bold text-stone-700">
-                    {weather?.temp}
-                  </span>
-                  <span className="text-5xl text-stone-300 mt-4">°</span>
-                </div>
-
-                <div className="px-6 py-2 bg-white/40 border border-white/50 rounded-full backdrop-blur-md flex items-center gap-2 text-stone-500 shadow-sm">
-                  <Icon icon="solar:clouds-linear" className="text-stone-400" />
-                  <span className="font-bold text-xs uppercase tracking-widest">
-                    {weather?.description}
-                  </span>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
+          </>
+        )}
       </main>
 
-      <footer className="relative z-10 p-10 bg-white/40 backdrop-blur-xl border-t border-white/40">
-        <div className="grid grid-cols-3 gap-6 mb-12">
+      <footer
+        className={`relative z-10 p-10 backdrop-blur-md transition-colors duration-700
+        ${isDarkMode ? "bg-black/20" : "bg-white/20"}`}
+      >
+        <div
+          className={`grid grid-cols-3 gap-6 mb-12 border-t pt-8
+          ${isDarkMode ? "border-white/5" : "border-black/5"}`}
+        >
           <StatCard
             label="Humidity"
             value={`${weather?.humidity || 0}%`}
             icon="solar:waterdrops-linear"
-            colorClass="text-blue-400"
-            bgClass="bg-blue-50"
+            isDarkMode={isDarkMode}
           />
           <StatCard
             label="Wind"
             value={`${weather?.windSpeed || 0} km/h`}
             icon="solar:wind-linear"
-            colorClass="text-teal-400"
-            bgClass="bg-teal-50"
+            isDarkMode={isDarkMode}
           />
           <StatCard
-            label="UV Index"
-            value="Low"
-            icon="solar:sun-linear"
-            colorClass="text-amber-400"
-            bgClass="bg-amber-50"
+            label="Condition"
+            value={weather?.description?.split(" ")[0] || "---"}
+            icon="solar:cloud-sun-linear"
+            isDarkMode={isDarkMode}
           />
         </div>
 
         <div className="flex justify-between items-center px-2">
           {weather?.forecast.map((day, idx) => (
-            <div key={idx} className="flex flex-col items-center gap-3">
-              <span className="text-[10px] font-bold text-stone-400 uppercase tracking-tighter">
+            <div
+              key={idx}
+              className="flex flex-col items-center gap-3 group cursor-default"
+            >
+              <span className="text-[10px] font-medium uppercase tracking-widest opacity-40">
                 {day.day}
               </span>
               <div
-                className={`w-12 h-12 rounded-full ${day.bgClass} flex items-center justify-center border border-stone-100 ${day.colorClass} shadow-sm`}
+                className={`w-10 h-10 flex items-center justify-center transition-transform group-hover:scale-110`}
               >
-                <Icon icon={day.icon} width="24" />
+                <Icon
+                  icon={day.icon}
+                  width="22"
+                  className={isDarkMode ? "text-white/60" : "text-black/60"}
+                />
               </div>
-              <span className="text-sm font-bold text-stone-600">
-                {day.temp}°
-              </span>
+              <span className="text-xs font-bold italic">{day.temp}°</span>
             </div>
           ))}
         </div>
       </footer>
-
-      <div className="absolute bottom-24 left-10 opacity-20">
-        <Icon
-          icon="solar:cloud-linear"
-          width="32"
-          className="text-stone-500 animate-pulse"
-        />
-      </div>
     </div>
   );
 };

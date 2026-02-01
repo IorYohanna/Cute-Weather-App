@@ -1,22 +1,33 @@
-import { Icon } from '@iconify/react';
+import { Icon } from "@iconify/react";
 
 export const WeatherHero = () => (
-  <div className="relative w-64 h-64 animate-float cursor-default group">
-    <div className="absolute inset-0 m-auto w-40 h-40 bg-linear-to-tr from-amber-200 to-orange-100 rounded-full shadow-[0_0_60px_-10px_rgba(251,191,36,0.3)] flex flex-col items-center justify-center border border-orange-100/50">
-      <div className="relative mt-2 flex gap-4">
-        <div className="w-3 h-3 bg-stone-700 rounded-full animate-blink"></div>
-        <div className="w-3 h-3 bg-stone-700 rounded-full animate-blink"></div>
+  <div className="relative w-48 h-48 flex items-center justify-center">
+    <div className="absolute inset-0 m-auto w-40 h-40 bg-[#D9CFC0] rounded-full opacity-50 border border-[#3D3935]/10 shadow-inner" />
+
+    <div className="relative z-10 w-24 h-32 border-2 border-[#3D3935] bg-[#E8E2D6] shadow-[8px_8px_0px_0px_rgba(61,57,53,1)] flex flex-col p-2">
+      <div className="w-full h-1/2 border-b border-[#3D3935] flex items-center justify-center overflow-hidden">
+        <Icon
+          icon="solar:cloud-sun-linear"
+          className="text-[#3D3935]"
+          width="32"
+        />
       </div>
-      <div className="absolute top-[48%] w-full px-7 flex justify-between opacity-40">
-        <div className="w-4 h-2 bg-rose-400 rounded-full blur-[2px]"></div>
-        <div className="w-4 h-2 bg-rose-400 rounded-full blur-[2px]"></div>
+      <div className="w-full h-1/2 flex flex-col justify-around py-2">
+        <div className="h-1 w-full bg-[#3D3935]/20" />
+        <div className="h-1 w-2/3 bg-[#3D3935]/20" />
+        <div className="h-1 w-full bg-[#3D3935]/20" />
       </div>
-      <div className="w-4 h-2 mt-1 border-b-[3px] border-stone-700 rounded-full"></div>
     </div>
 
-    <div className="absolute bottom-10 -left-4 bg-white/90 backdrop-blur-sm w-24 h-12 rounded-full shadow-sm animate-drift delay-500"></div>
-    <div className="absolute bottom-16 -right-6 bg-white/80 backdrop-blur-sm w-20 h-10 rounded-full shadow-sm animate-drift delay-1000"></div>
-    
-    <Icon icon="solar:star-fall-linear" className="absolute top-0 right-10 text-amber-400 animate-pulse" width="24" />
+    <Icon
+      icon="ph:leaf-fill"
+      className="absolute top-4 right-4 text-[#3D3935] animate-float opacity-60"
+      width="24"
+    />
+    <Icon
+      icon="ph:leaf-fill"
+      className="absolute bottom-8 left-2 text-[#3D3935] animate-float steam-delay opacity-40 -rotate-90"
+      width="18"
+    />
   </div>
 );
